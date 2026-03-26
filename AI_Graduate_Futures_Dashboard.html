@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI & Graduate Futures — Business & Administrative Studies</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{--ink:#0e0f14;--paper:#f7f5f0;--cream:#ede9e0;--slate:#2a2d3e;--blue:#1a3a6b;--blue-mid:#2856a3;--blue-light:#d0dff5;--gold:#b8860b;--gold-light:#f5e9c4;--coral:#c84b2f;--coral-light:#f8ddd6;--teal:#1a6b5a;--teal-light:#cceee6;--amber:#9a5a00;--amber-light:#fde8c0;--purple:#5a3a8a;--purple-light:#e8e0f5;--muted:#6b6b72;--rule:#d0ccc2;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;}
+.masthead{background:var(--slate);color:white;position:relative;overflow:hidden;}
+.masthead-inner{max-width:1400px;margin:0 auto;padding:52px 48px 44px;position:relative;z-index:2;}
+.masthead-rule{width:60px;height:3px;background:var(--gold);margin-bottom:18px;}
+.masthead h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.8vw,3.4rem);font-weight:900;line-height:1.1;letter-spacing:-.02em;max-width:820px;margin-bottom:14px;}
+.masthead h1 em{color:#c8a84e;font-style:normal;}
+.masthead-sub{font-size:.95rem;color:rgba(255,255,255,.62);max-width:600px;margin-bottom:28px;font-weight:300;}
+.masthead-meta{display:flex;gap:28px;flex-wrap:wrap;}
+.meta-pill{font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45);display:flex;align-items:center;gap:5px;}
+.meta-pill span{color:rgba(255,255,255,.88);}
+.masthead-geo{position:absolute;right:-60px;top:-60px;width:480px;height:480px;border-radius:50%;border:1px solid rgba(255,255,255,.06);pointer-events:none;}
+.masthead-geo::before{content:'';position:absolute;inset:40px;border-radius:50%;border:1px solid rgba(255,255,255,.06);}
+.nav-strip{background:var(--blue);display:flex;gap:0;overflow-x:auto;scrollbar-width:none;}
+.nav-strip::-webkit-scrollbar{display:none;}
+.nav-btn{padding:13px 22px;color:rgba(255,255,255,.58);font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border:none;background:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
+.nav-btn:hover{color:white;}
+.nav-btn.active{color:white;border-bottom-color:var(--gold);background:rgba(255,255,255,.06);}
+.page{display:none;}
+.page.active{display:block;}
+.content{max-width:1400px;margin:0 auto;padding:44px 48px;}
+.section-head{display:flex;align-items:baseline;gap:14px;margin-bottom:28px;padding-bottom:10px;border-bottom:1px solid var(--rule);}
+.section-head h2{font-family:'Playfair Display',serif;font-size:1.65rem;font-weight:700;letter-spacing:-.01em;}
+.eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:32px;}
+.kpi-card{background:white;border:1px solid var(--rule);border-radius:2px;padding:22px 18px 18px;position:relative;overflow:hidden;}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.kpi-card.c-blue::before{background:var(--blue);}.kpi-card.c-coral::before{background:var(--coral);}
+.kpi-card.c-teal::before{background:var(--teal);}.kpi-card.c-amber::before{background:var(--amber);}
+.kpi-card.c-purple::before{background:var(--purple);}.kpi-card.c-gold::before{background:var(--gold);}
+.kpi-label{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.kpi-value{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;line-height:1;letter-spacing:-.02em;margin-bottom:4px;}
+.kpi-card.c-blue .kpi-value{color:var(--blue);}.kpi-card.c-coral .kpi-value{color:var(--coral);}
+.kpi-card.c-teal .kpi-value{color:var(--teal);}.kpi-card.c-amber .kpi-value{color:var(--amber);}
+.kpi-card.c-purple .kpi-value{color:var(--purple);}.kpi-card.c-gold .kpi-value{color:var(--gold);}
+.kpi-note{font-size:.75rem;color:var(--muted);line-height:1.3;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.grid-2-1{display:grid;grid-template-columns:2fr 1fr;gap:18px;}
+@media(max-width:1020px){.grid-2,.grid-2-1{grid-template-columns:1fr;}}
+.panel{background:white;border:1px solid var(--rule);border-radius:2px;padding:22px;}
+.panel-title{font-size:.67rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid var(--rule);}
+.bar-item{display:grid;grid-template-columns:1fr 120px 48px;gap:8px;align-items:center;margin-bottom:9px;}
+.bar-item-label{font-size:.78rem;color:var(--ink);line-height:1.3;}
+.bar-track{background:var(--cream);border-radius:1px;height:9px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:1px;}
+.bar-pct{font-family:'DM Mono',monospace;font-size:.76rem;font-weight:500;text-align:right;}
+.job-list{list-style:none;}
+.job-item{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--rule);}
+.job-item:last-child{border-bottom:none;}
+.job-rank{font-family:'DM Mono',monospace;font-size:.68rem;font-weight:500;color:var(--muted);min-width:18px;padding-top:2px;}
+.job-name{font-size:.82rem;line-height:1.3;flex:1;}
+.job-ai-tag{font-size:.6rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:1px;margin-left:4px;white-space:nowrap;align-self:center;flex-shrink:0;}
+.tag-high{background:var(--coral-light);color:var(--coral);}
+.tag-med{background:var(--amber-light);color:var(--amber);}
+.tag-low{background:var(--teal-light);color:var(--teal);}
+.subj-tabs{display:flex;gap:6px;margin-bottom:22px;flex-wrap:wrap;}
+.subj-tab{padding:7px 16px;font-size:.75rem;font-weight:600;border:1px solid var(--rule);background:white;cursor:pointer;border-radius:1px;transition:all .15s;color:var(--muted);}
+.subj-tab.active{background:var(--slate);color:white;border-color:var(--slate);}
+.subj-panel{display:none;}
+.subj-panel.active{display:block;}
+.quote-block{border-left:4px solid var(--blue);padding:14px 22px;background:var(--blue-light);margin:22px 0;border-radius:0 2px 2px 0;}
+.quote-block p{font-family:'Playfair Display',serif;font-size:1rem;line-height:1.5;color:var(--blue);margin-bottom:6px;font-style:italic;}
+.quote-block cite{font-size:.72rem;color:var(--muted);font-style:normal;}
+.stat-callout{display:flex;gap:20px;flex-wrap:wrap;padding:22px;background:var(--slate);color:white;border-radius:2px;margin:22px 0;}
+.stat-item{text-align:center;flex:1;min-width:110px;}
+.stat-big{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:900;color:#c8a84e;line-height:1;display:block;}
+.stat-desc{font-size:.72rem;color:rgba(255,255,255,.58);line-height:1.3;margin-top:4px;}
+.impact-row{display:flex;align-items:center;gap:10px;margin-bottom:7px;}
+.impact-label{font-size:.78rem;min-width:240px;}
+.impact-track{flex:1;height:11px;background:var(--cream);border-radius:2px;overflow:hidden;}
+.impact-fill{height:100%;border-radius:2px;}
+.impact-score{font-family:'DM Mono',monospace;font-size:.73rem;color:var(--muted);min-width:30px;text-align:right;}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.7rem;align-items:center;margin-top:12px;}
+.legend span{display:flex;align-items:center;gap:5px;}
+.legend-dot{width:9px;height:9px;border-radius:1px;display:inline-block;}
+.matrix-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px;}
+@media(max-width:900px){.matrix-grid{grid-template-columns:1fr;}}
+.matrix-cell{padding:14px;border-radius:2px;border:1px solid var(--rule);}
+.matrix-cell h4{font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px;}
+.matrix-cell p{font-size:.74rem;line-height:1.5;}
+.matrix-cell.high{background:var(--coral-light);border-color:#e5b4a8;}.matrix-cell.high h4{color:var(--coral);}
+.matrix-cell.med{background:var(--amber-light);border-color:#e8d098;}.matrix-cell.med h4{color:var(--amber);}
+.matrix-cell.low{background:var(--teal-light);border-color:#9fd4ca;}.matrix-cell.low h4{color:var(--teal);}
+.action-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;}
+.action-card{border:1px solid var(--rule);border-radius:2px;overflow:hidden;background:white;}
+.action-header{padding:12px 16px;display:flex;align-items:center;gap:10px;}
+.action-num{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;line-height:1;opacity:.25;}
+.action-title{font-size:.82rem;font-weight:600;line-height:1.3;}
+.action-body{padding:0 16px 16px;font-size:.76rem;color:var(--muted);line-height:1.5;}
+.action-card.a1 .action-header{background:var(--blue-light);}.action-card.a1 .action-num{color:var(--blue);}
+.action-card.a2 .action-header{background:var(--gold-light);}.action-card.a2 .action-num{color:var(--gold);}
+.action-card.a3 .action-header{background:var(--coral-light);}.action-card.a3 .action-num{color:var(--coral);}
+.action-card.a4 .action-header{background:var(--teal-light);}.action-card.a4 .action-num{color:var(--teal);}
+.action-card.a5 .action-header{background:var(--amber-light);}.action-card.a5 .action-num{color:var(--amber);}
+.disc-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px;}
+.d-econ{background:#1a3a6b;}.d-fin{background:#c84b2f;}.d-bm{background:#1a6b5a;}.d-hosp{background:#9a5a00;}.d-mkt{background:#5a3a8a;}
+/* enhanced comparison table with colour-coded risk */
+.comp-table{width:100%;border-collapse:collapse;font-size:.79rem;}
+.comp-table th{background:var(--slate);color:white;padding:9px 10px;text-align:left;font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
+.comp-table td{padding:7px 10px;border-bottom:1px solid var(--rule);}
+.comp-table tr:nth-child(even) td{background:var(--cream);}
+.pct-cell{font-family:'DM Mono',monospace;font-weight:500;}
+.risk-high{background:var(--coral-light)!important;color:var(--coral);font-weight:700;}
+.risk-med{background:var(--amber-light)!important;color:var(--amber);font-weight:600;}
+.risk-low{background:var(--teal-light)!important;color:var(--teal);}
+.urgency{font-size:.62rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:1px;}
+.urg-imm{background:var(--coral-light);color:var(--coral);}
+.urg-hi{background:var(--amber-light);color:var(--amber);}
+.urg-med{background:var(--blue-light);color:var(--blue);}
+/* discipline-specific AI disruption mini-bars */
+.disc-impact-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.disc-impact-label{font-size:.75rem;min-width:200px;}
+.disc-impact-track{flex:1;height:8px;background:var(--cream);border-radius:1px;overflow:hidden;}
+.disc-impact-fill{height:100%;border-radius:1px;}
+.disc-impact-score{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--muted);min-width:28px;text-align:right;}
+.info-box{padding:14px 16px;border-radius:2px;margin-top:16px;font-size:.84rem;line-height:1.6;}
+.info-box-title{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
+.spacer{height:24px;}
+.mb-20{margin-bottom:20px;}
+.mb-28{margin-bottom:28px;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.panel,.kpi-card,.action-card{animation:fadeUp .45s ease both;}
+.dash-footer{background:var(--slate);color:rgba(255,255,255,.4);font-size:.7rem;text-align:center;padding:18px 48px;letter-spacing:.04em;}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-geo"></div>
+  <div class="masthead-inner">
+    <div class="masthead-rule"></div>
+    <h1>Business &amp; Administrative Studies:<br><em>Graduate Destinations &amp; the AI Transformation</em></h1>
+    <p class="masthead-sub">Where graduates go, and how artificial intelligence is reshaping those destinations — evidence from What Do Graduates Do? 2025/26 and McKinsey's Superagency in the Workplace.</p>
+    <div class="masthead-meta">
+      <div class="meta-pill">Source: <span>What Do Graduates Do? 2025/26 (Prospects/HESA)</span></div>
+      <div class="meta-pill">Source: <span>McKinsey Superagency in the Workplace, January 2025</span></div>
+      <div class="meta-pill">BAS cohort: <span>~21,700 graduates across 5 subjects</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="nav-strip">
+  <button class="nav-btn active" onclick="showPage('overview',this)">Overview</button>
+  <button class="nav-btn" onclick="showPage('disciplines',this)">All Disciplines</button>
+  <button class="nav-btn" onclick="showPage('ai-impact',this)">AI Impact</button>
+  <button class="nav-btn" onclick="showPage('university',this)">University Response</button>
+</div>
+
+<!-- ═════ OVERVIEW ═════ -->
+<div id="page-overview" class="page active">
+<div class="content">
+  <div class="section-head"><div><div class="eyebrow">Landscape</div><h2>Five BAS Disciplines at a Glance</h2></div></div>
+  <div class="kpi-row">
+    <div class="kpi-card c-blue"><div class="kpi-label">Economics</div><div class="kpi-value">4,480</div><div class="kpi-note">60.1% full-time · £36,100 avg salary (M) · 6.3% unemployed</div></div>
+    <div class="kpi-card c-coral"><div class="kpi-label">Finance &amp; Accountancy</div><div class="kpi-value">4,575</div><div class="kpi-note">57.5% full-time · 23.0% in clerical roles ⚠ · 7.3% unemployed</div></div>
+    <div class="kpi-card c-teal"><div class="kpi-label">Business &amp; Management</div><div class="kpi-value">8,825</div><div class="kpi-note">62.4% full-time · broadest destination spread · 6.3% unemployed</div></div>
+    <div class="kpi-card c-amber"><div class="kpi-label">Hospitality / Tourism / Transport</div><div class="kpi-value">1,675</div><div class="kpi-note">60.8% full-time · 7.2% unemployed (highest BAS)</div></div>
+    <div class="kpi-card c-purple"><div class="kpi-label">Marketing</div><div class="kpi-value">2,160</div><div class="kpi-note">66.4% full-time (highest BAS) · 51.0% in marketing roles · 6.7% unemployed</div></div>
+  </div>
+  <div class="grid-2 mb-28">
+    <div class="panel">
+      <div class="panel-title">Full-time employment rate — all 5 disciplines vs national average (56.4%)</div>
+      <div style="position:relative;height:240px;"><canvas id="ftChart"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Employment outcomes breakdown — all five disciplines (%)</div>
+      <div style="position:relative;height:240px;"><canvas id="outcomesChart"></canvas></div>
+    </div>
+  </div>
+  <div class="panel mb-28">
+    <div class="panel-title">Work-type concentration by discipline — business/finance roles, marketing/sales, clerical, and retail/catering (%)</div>
+    <div style="position:relative;height:220px;"><canvas id="concChart"></canvas></div>
+  </div>
+  <div class="quote-block">
+    <p>"Achieving AI superagency is not simply about mastering technology. It is every bit as much about supporting people, creating processes, and managing governance."</p>
+    <cite>— McKinsey, Superagency in the Workplace, January 2025</cite>
+  </div>
+  <div class="stat-callout">
+    <div class="stat-item"><span class="stat-big">3×</span><div class="stat-desc">More employees use gen AI than their C-suite leaders estimate</div></div>
+    <div class="stat-item"><span class="stat-big">$4.4T</span><div class="stat-desc">McKinsey's estimate of corporate AI productivity potential</div></div>
+    <div class="stat-item"><span class="stat-big">92%</span><div class="stat-desc">Of companies plan to increase AI investment over next 3 years</div></div>
+    <div class="stat-item"><span class="stat-big">47%</span><div class="stat-desc">Of employees expect AI to replace 30%+ of their work within a year</div></div>
+    <div class="stat-item"><span class="stat-big">1%</span><div class="stat-desc">Of companies describe their AI deployment as "mature"</div></div>
+  </div>
+</div>
+</div>
+
+<!-- ═════ ALL DISCIPLINES ═════ -->
+<div id="page-disciplines" class="page">
+<div class="content">
+  <div class="section-head"><div><div class="eyebrow">Five Disciplines</div><h2>Graduate Destination Data &amp; AI Disruption by Subject</h2></div></div>
+  <div class="subj-tabs">
+    <button class="subj-tab active" onclick="showSubj('econ',this)"><span class="disc-dot d-econ"></span>Economics</button>
+    <button class="subj-tab" onclick="showSubj('fin',this)"><span class="disc-dot d-fin"></span>Finance &amp; Accountancy</button>
+    <button class="subj-tab" onclick="showSubj('bm',this)"><span class="disc-dot d-bm"></span>Business &amp; Management</button>
+    <button class="subj-tab" onclick="showSubj('hosp',this)"><span class="disc-dot d-hosp"></span>Hospitality, Tourism &amp; Transport</button>
+    <button class="subj-tab" onclick="showSubj('mkt',this)"><span class="disc-dot d-mkt"></span>Marketing</button>
+  </div>
+
+  <!-- ECONOMICS -->
+  <div id="subj-econ" class="subj-panel active">
+    <div class="kpi-row">
+      <div class="kpi-card c-blue"><div class="kpi-label">Total Responses</div><div class="kpi-value">4,480</div><div class="kpi-note">F: 1,280 / M: 3,200</div></div>
+      <div class="kpi-card c-blue"><div class="kpi-label">Working Full-Time</div><div class="kpi-value">60.1%</div><div class="kpi-note">Part-time: 6.5% · W&amp;S: 6.8%</div></div>
+      <div class="kpi-card c-blue"><div class="kpi-label">Unemployed</div><div class="kpi-value">6.3%</div><div class="kpi-note">Further study: 14.8% · Other: 5.4%</div></div>
+      <div class="kpi-card c-blue"><div class="kpi-label">In Biz/HR/Finance Roles</div><div class="kpi-value">61.2%</div><div class="kpi-note">Highest professional concentration in BAS</div></div>
+      <div class="kpi-card c-gold"><div class="kpi-label">Avg Salary (Male)</div><div class="kpi-value">£36,100</div><div class="kpi-note">Highest average starting salary across all BAS</div></div>
+    </div>
+    <div class="grid-2-1 mb-20">
+      <div class="panel">
+        <div class="panel-title">Type of work — Economics (n = 3,250 in UK employment)</div>
+        <div class="bar-item"><div class="bar-item-label">Business, HR &amp; finance professionals</div><div class="bar-track"><div class="bar-fill" style="width:88%;background:var(--blue)"></div></div><div class="bar-pct" style="color:var(--blue)">61.2%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Clerical, secretarial &amp; numerical clerks</div><div class="bar-track"><div class="bar-fill" style="width:17%;background:var(--muted)"></div></div><div class="bar-pct">11.7%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Marketing, PR &amp; sales professionals</div><div class="bar-track"><div class="bar-fill" style="width:8%;background:var(--teal)"></div></div><div class="bar-pct">5.7%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Retail, catering &amp; bar staff</div><div class="bar-track"><div class="bar-fill" style="width:8%;background:var(--muted)"></div></div><div class="bar-pct">5.5%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Managers</div><div class="bar-track"><div class="bar-fill" style="width:6%;background:var(--amber)"></div></div><div class="bar-pct">3.9%</div></div>
+        <div class="bar-item"><div class="bar-item-label">IT professionals</div><div class="bar-track"><div class="bar-fill" style="width:5%;background:var(--coral)"></div></div><div class="bar-pct">3.8%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Legal, social &amp; welfare professionals</div><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--muted)"></div></div><div class="bar-pct">1.1%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Education professionals</div><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--muted)"></div></div><div class="bar-pct">1.1%</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Top 10 professional jobs <span style="font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)">— AI role disruption risk</span></div>
+        <div style="display:flex;gap:10px;margin-bottom:10px;font-size:.68rem;">
+          <span style="display:flex;align-items:center;gap:4px;"><span class="job-ai-tag tag-high" style="margin:0">High</span> role likely automated or significantly transformed</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span class="job-ai-tag tag-med" style="margin:0">Med</span> role changes but human remains central</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span class="job-ai-tag tag-low" style="margin:0">Lower</span> human value hard to replicate</span>
+        </div>
+        <ul class="job-list">
+          <li class="job-item"><span class="job-rank">01</span><span class="job-name">Finance &amp; investment analysts and advisers</span><span class="job-ai-tag tag-high">High</span></li>
+          <li class="job-item"><span class="job-rank">02</span><span class="job-name">Chartered &amp; certified accountants</span><span class="job-ai-tag tag-high">High</span></li>
+          <li class="job-item"><span class="job-rank">03</span><span class="job-name">Actuaries, economists &amp; statisticians</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">04</span><span class="job-name">Management consultants &amp; business analysts</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">05</span><span class="job-name">Data analysts</span><span class="job-ai-tag tag-high">High</span></li>
+          <li class="job-item"><span class="job-rank">06</span><span class="job-name">Taxation experts</span><span class="job-ai-tag tag-high">High</span></li>
+          <li class="job-item"><span class="job-rank">07</span><span class="job-name">Business sales executives</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">08</span><span class="job-name">Financial accounts managers</span><span class="job-ai-tag tag-high">High</span></li>
+          <li class="job-item"><span class="job-rank">09</span><span class="job-name">Brokers</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">10</span><span class="job-name">Business associate professionals</span><span class="job-ai-tag tag-med">Med</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel" style="background:var(--blue-light);border-color:#b8cef0;">
+      <div class="panel-title" style="color:var(--blue);">AI disruption mapped — Economics</div>
+      <div style="font-size:.76rem;color:var(--muted);margin-bottom:12px;line-height:1.5;"><em>The tags above show the risk level for each specific job title. These bars show how much AI is disrupting each <strong>task or function</strong> within those jobs — because a role rated "Med" may still contain individual tasks at very high risk of automation.</em></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Finance &amp; investment analysis</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:88%;background:var(--coral)"></div></div><div class="disc-impact-score" style="color:var(--coral)">88%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Taxation &amp; compliance work</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:85%;background:var(--coral)"></div></div><div class="disc-impact-score" style="color:var(--coral)">85%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Data analysis &amp; statistical modelling</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:74%;background:var(--amber)"></div></div><div class="disc-impact-score" style="color:var(--amber)">74%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Chartered accountancy work</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:76%;background:var(--amber)"></div></div><div class="disc-impact-score" style="color:var(--amber)">76%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Management consulting</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:62%;background:var(--amber)"></div></div><div class="disc-impact-score" style="color:var(--amber)">62%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Actuarial &amp; statistical work</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:55%;background:var(--amber)"></div></div><div class="disc-impact-score" style="color:var(--amber)">55%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Sales &amp; business development</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:48%;background:var(--teal)"></div></div><div class="disc-impact-score" style="color:var(--teal)">48%</div></div>
+      <div class="legend">
+        <span><span class="legend-dot" style="background:var(--coral)"></span>High (&gt;70%)</span>
+        <span><span class="legend-dot" style="background:var(--amber)"></span>Moderate (50–70%)</span>
+        <span><span class="legend-dot" style="background:var(--teal)"></span>Lower (&lt;50%)</span>
+      </div>
+      <div style="margin-top:10px;padding:8px 10px;background:rgba(200,75,47,.1);border-radius:2px;font-size:.78rem;"><strong style="color:var(--coral)">Urgency: Immediate.</strong> Top 5 graduate roles (finance analysis, accountancy, data analysis, taxation, financial accounts management) all sit in the highest-potential AI functions per McKinsey.</div>
+    </div>
+  </div>
+
+  <!-- FINANCE -->
+  <div id="subj-fin" class="subj-panel">
+    <div class="kpi-row">
+      <div class="kpi-card c-coral"><div class="kpi-label">Total Responses</div><div class="kpi-value">4,575</div><div class="kpi-note">F: 1,640 / M: 2,930</div></div>
+      <div class="kpi-card c-coral"><div class="kpi-label">Working Full-Time</div><div class="kpi-value">57.5%</div><div class="kpi-note">Part-time: 6.4% · W&amp;S: 8.1%</div></div>
+      <div class="kpi-card c-coral"><div class="kpi-label">Unemployed</div><div class="kpi-value">7.3%</div><div class="kpi-note">Further study: 18.1% · Other: 2.6%</div></div>
+      <div class="kpi-card c-coral"><div class="kpi-label">In Clerical Roles ⚠</div><div class="kpi-value">23.0%</div><div class="kpi-note">Highest clerical rate of any BAS subject</div></div>
+      <div class="kpi-card c-coral"><div class="kpi-label">Prof. Qual. in Further Study</div><div class="kpi-value">64.8%</div><div class="kpi-note">Of 950 in further study — highest in BAS</div></div>
+    </div>
+    <div class="grid-2-1 mb-20">
+      <div class="panel">
+        <div class="panel-title">Type of work — Finance &amp; Accountancy (n = 3,380 in UK employment)</div>
+        <div class="bar-item"><div class="bar-item-label">Business, HR &amp; finance professionals</div><div class="bar-track"><div class="bar-fill" style="width:77%;background:var(--coral)"></div></div><div class="bar-pct" style="color:var(--coral)">53.5%</div></div>
+        <div class="bar-item"><div class="bar-item-label" style="color:var(--coral);font-weight:600">⚠ Clerical, secretarial &amp; numerical clerks</div><div class="bar-track"><div class="bar-fill" style="width:33%;background:var(--coral)"></div></div><div class="bar-pct" style="color:var(--coral)">23.0%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Retail, catering &amp; bar staff</div><div class="bar-track"><div class="bar-fill" style="width:10%;background:var(--muted)"></div></div><div class="bar-pct">7.1%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Managers</div><div class="bar-track"><div class="bar-fill" style="width:6%;background:var(--amber)"></div></div><div class="bar-pct">3.8%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Marketing, PR &amp; sales professionals</div><div class="bar-track"><div class="bar-fill" style="width:4%;background:var(--teal)"></div></div><div class="bar-pct">2.9%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Education professionals</div><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--muted)"></div></div><div class="bar-pct">1.3%</div></div>
+        <div class="bar-item"><div class="bar-item-label">IT professionals</div><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--muted)"></div></div><div class="bar-pct">1.3%</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Top 10 professional jobs <span style="font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)">— AI role disruption risk</span></div>
+        <div style="display:flex;gap:10px;margin-bottom:10px;font-size:.68rem;">
+          <span style="display:flex;align-items:center;gap:4px;"><span class="job-ai-tag tag-high" style="margin:0">High</span> role likely automated or significantly transformed</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span class="job-ai-tag tag-med" style="margin:0">Med</span> role changes but human remains central</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span class="job-ai-tag tag-low" style="margin:0">Lower</span> human value hard to replicate</span>
+        </div>
+        <ul class="job-list">
+          <li class="job-item"><span class="job-rank">01</span><span class="job-name">Chartered &amp; certified accountants</span><span class="job-ai-tag tag-high">High</span></li>
+          <li class="job-item"><span class="job-rank">02</span><span class="job-name">Finance &amp; investment analysts and advisers</span><span class="job-ai-tag tag-high">High</span></li>
+          <li class="job-item"><span class="job-rank">03</span><span class="job-name">Taxation experts</span><span class="job-ai-tag tag-high">High</span></li>
+          <li class="job-item"><span class="job-rank">04</span><span class="job-name">Management consultants &amp; business analysts</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">05</span><span class="job-name">Financial accounts managers</span><span class="job-ai-tag tag-high">High</span></li>
+          <li class="job-item"><span class="job-rank">06</span><span class="job-name">Actuaries, economists &amp; statisticians</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">07</span><span class="job-name">Business sales executives</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">08</span><span class="job-name">Brokers</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">09</span><span class="job-name">Data analysts</span><span class="job-ai-tag tag-high">High</span></li>
+          <li class="job-item"><span class="job-rank">10</span><span class="job-name">Financial managers &amp; directors</span><span class="job-ai-tag tag-med">Med</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel" style="background:var(--coral-light);border-color:#e5b4a8;">
+      <div class="panel-title" style="color:var(--coral)">AI disruption mapped — Finance &amp; Accountancy</div>
+      <div style="font-size:.76rem;color:var(--muted);margin-bottom:12px;line-height:1.5;"><em>The tags above show the risk level for each specific job title. These bars show how much AI is disrupting each <strong>task or function</strong> within those jobs — because a role rated "Med" may still contain individual tasks at very high risk of automation.</em></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Numerical clerks &amp; data entry (23% of graduates)</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:94%;background:var(--coral)"></div></div><div class="disc-impact-score" style="color:var(--coral)">94%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Standard tax computation &amp; compliance</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:85%;background:var(--coral)"></div></div><div class="disc-impact-score" style="color:var(--coral)">85%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Routine financial reporting &amp; reconciliation</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:82%;background:var(--coral)"></div></div><div class="disc-impact-score" style="color:var(--coral)">82%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Standard accountancy &amp; audit work</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:76%;background:var(--amber)"></div></div><div class="disc-impact-score" style="color:var(--amber)">76%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Financial analysis (AI drafts, human reviews)</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:62%;background:var(--amber)"></div></div><div class="disc-impact-score" style="color:var(--amber)">62%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Brokerage &amp; client advisory</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:48%;background:var(--teal)"></div></div><div class="disc-impact-score" style="color:var(--teal)">48%</div></div>
+      <div class="legend">
+        <span><span class="legend-dot" style="background:var(--coral)"></span>High (&gt;70%)</span>
+        <span><span class="legend-dot" style="background:var(--amber)"></span>Moderate (50–70%)</span>
+        <span><span class="legend-dot" style="background:var(--teal)"></span>Lower (&lt;50%)</span>
+      </div>
+      <div style="margin-top:10px;padding:8px 10px;background:rgba(200,75,47,.15);border-radius:2px;font-size:.78rem;"><strong style="color:var(--coral)">Urgency: Immediate.</strong> 23% of employed graduates are in clerical roles — the category with the highest AI automation score (94%). McKinsey documents agentic AI completing these workflows autonomously in 2025.</div>
+    </div>
+  </div>
+
+  <!-- BUSINESS & MANAGEMENT -->
+  <div id="subj-bm" class="subj-panel">
+    <div class="kpi-row">
+      <div class="kpi-card c-teal"><div class="kpi-label">Total Responses</div><div class="kpi-value">8,825</div><div class="kpi-note">F: 4,115 / M: 4,710 — largest BAS cohort</div></div>
+      <div class="kpi-card c-teal"><div class="kpi-label">Working Full-Time</div><div class="kpi-value">62.4%</div><div class="kpi-note">Part-time: 9.7% · W&amp;S: 10.4%</div></div>
+      <div class="kpi-card c-teal"><div class="kpi-label">Unemployed</div><div class="kpi-value">6.3%</div><div class="kpi-note">Further study: 2.9% · Other: 8.3%</div></div>
+      <div class="kpi-card c-teal"><div class="kpi-label">In Marketing/Sales</div><div class="kpi-value">16.4%</div><div class="kpi-note">High AI disruption category</div></div>
+      <div class="kpi-card c-teal"><div class="kpi-label">In Management Roles</div><div class="kpi-value">12.2%</div><div class="kpi-note">Broad leadership entry route</div></div>
+    </div>
+    <div class="grid-2-1 mb-20">
+      <div class="panel">
+        <div class="panel-title">Type of work — Business &amp; Management (n = 6,230 in UK employment)</div>
+        <div class="bar-item"><div class="bar-item-label">Business, HR &amp; finance professionals</div><div class="bar-track"><div class="bar-fill" style="width:33%;background:var(--teal)"></div></div><div class="bar-pct" style="color:var(--teal)">23.2%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Marketing, PR &amp; sales professionals</div><div class="bar-track"><div class="bar-fill" style="width:23%;background:var(--teal)"></div></div><div class="bar-pct">16.4%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Clerical, secretarial &amp; numerical clerks</div><div class="bar-track"><div class="bar-fill" style="width:19%;background:var(--muted)"></div></div><div class="bar-pct">13.2%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Managers</div><div class="bar-track"><div class="bar-fill" style="width:17%;background:var(--gold)"></div></div><div class="bar-pct">12.2%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Retail, catering &amp; bar staff</div><div class="bar-track"><div class="bar-fill" style="width:15%;background:var(--coral)"></div></div><div class="bar-pct" style="color:var(--coral)">10.4%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Engineering &amp; building professionals</div><div class="bar-track"><div class="bar-fill" style="width:7%;background:var(--muted)"></div></div><div class="bar-pct">5.0%</div></div>
+        <div class="bar-item"><div class="bar-item-label">IT professionals</div><div class="bar-track"><div class="bar-fill" style="width:4%;background:var(--muted)"></div></div><div class="bar-pct">3.1%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Education professionals</div><div class="bar-track"><div class="bar-fill" style="width:4%;background:var(--muted)"></div></div><div class="bar-pct">2.5%</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Top 10 professional jobs <span style="font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)">— AI role disruption risk</span></div>
+        <div style="display:flex;gap:10px;margin-bottom:10px;font-size:.68rem;">
+          <span style="display:flex;align-items:center;gap:4px;"><span class="job-ai-tag tag-high" style="margin:0">High</span> role likely automated or significantly transformed</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span class="job-ai-tag tag-med" style="margin:0">Med</span> role changes but human remains central</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span class="job-ai-tag tag-low" style="margin:0">Lower</span> human value hard to replicate</span>
+        </div>
+        <ul class="job-list">
+          <li class="job-item"><span class="job-rank">01</span><span class="job-name">Advertising &amp; marketing associate professionals</span><span class="job-ai-tag tag-high">High</span></li>
+          <li class="job-item"><span class="job-rank">02</span><span class="job-name">Business sales executives</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">03</span><span class="job-name">HR &amp; industrial relations officers</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">04</span><span class="job-name">Chartered &amp; certified accountants</span><span class="job-ai-tag tag-high">High</span></li>
+          <li class="job-item"><span class="job-rank">05</span><span class="job-name">Finance &amp; investment analysts and advisers</span><span class="job-ai-tag tag-high">High</span></li>
+          <li class="job-item"><span class="job-rank">06</span><span class="job-name">Management consultants &amp; business analysts</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">07</span><span class="job-name">Sales accounts &amp; business development managers</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">08</span><span class="job-name">Business &amp; financial project management</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">09</span><span class="job-name">Managers &amp; directors in retail and wholesale</span><span class="job-ai-tag tag-low">Lower</span></li>
+          <li class="job-item"><span class="job-rank">10</span><span class="job-name">Chartered surveyors</span><span class="job-ai-tag tag-low">Lower</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel" style="background:var(--teal-light);border-color:#9fd4ca;">
+      <div class="panel-title" style="color:var(--teal)">AI disruption mapped — Business &amp; Management</div>
+      <div style="font-size:.76rem;color:var(--muted);margin-bottom:12px;line-height:1.5;"><em>The tags above show the risk level for each specific job title. These bars show how much AI is disrupting each <strong>task or function</strong> within those jobs — because a role rated "Med" may still contain individual tasks at very high risk of automation.</em></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Marketing content &amp; campaigns (16.4%)</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:88%;background:var(--coral)"></div></div><div class="disc-impact-score" style="color:var(--coral)">88%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Clerical &amp; numerical work (13.2%)</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:80%;background:var(--amber)"></div></div><div class="disc-impact-score" style="color:var(--amber)">80%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">HR screening &amp; recruitment</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:56%;background:var(--amber)"></div></div><div class="disc-impact-score" style="color:var(--amber)">56%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Management consulting</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:62%;background:var(--amber)"></div></div><div class="disc-impact-score" style="color:var(--amber)">62%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Sales &amp; business development</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:48%;background:var(--teal)"></div></div><div class="disc-impact-score" style="color:var(--teal)">48%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Strategic management &amp; leadership</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:28%;background:var(--teal)"></div></div><div class="disc-impact-score" style="color:var(--teal)">28%</div></div>
+      <div class="legend">
+        <span><span class="legend-dot" style="background:var(--coral)"></span>High (&gt;70%)</span>
+        <span><span class="legend-dot" style="background:var(--amber)"></span>Moderate (50–70%)</span>
+        <span><span class="legend-dot" style="background:var(--teal)"></span>Lower (&lt;50%)</span>
+      </div>
+      <div style="margin-top:10px;padding:8px 10px;background:rgba(26,107,90,.1);border-radius:2px;font-size:.78rem;"><strong style="color:var(--teal)">Urgency: Medium.</strong> Broadest spread of any discipline — multiple categories disrupted at different rates. Management and leadership roles remain more resilient; marketing and clerical are immediately affected.</div>
+    </div>
+  </div>
+
+  <!-- HOSPITALITY -->
+  <div id="subj-hosp" class="subj-panel">
+    <div class="kpi-row">
+      <div class="kpi-card c-amber"><div class="kpi-label">Total Responses</div><div class="kpi-value">1,675</div><div class="kpi-note">F: 1,040 / M: 635</div></div>
+      <div class="kpi-card c-amber"><div class="kpi-label">Working Full-Time</div><div class="kpi-value">60.8%</div><div class="kpi-note">Part-time: 9.9% · W&amp;S: 5.9%</div></div>
+      <div class="kpi-card c-amber"><div class="kpi-label">Unemployed ⚠</div><div class="kpi-value">7.2%</div><div class="kpi-note">Highest unemployment across all BAS · Other: 14.0%</div></div>
+      <div class="kpi-card c-amber"><div class="kpi-label">In Retail/Catering Roles</div><div class="kpi-value">15.8%</div><div class="kpi-note">Highest retail/catering rate in all BAS</div></div>
+      <div class="kpi-card c-amber"><div class="kpi-label">In Clerical Roles</div><div class="kpi-value">19.2%</div><div class="kpi-note">Second highest clerical rate in BAS</div></div>
+    </div>
+    <div class="grid-2-1 mb-20">
+      <div class="panel">
+        <div class="panel-title">Type of work — Hospitality, Tourism &amp; Transport (n = 1,145 in UK employment)</div>
+        <div class="bar-item"><div class="bar-item-label" style="color:var(--amber);font-weight:600">⚠ Clerical, secretarial &amp; numerical clerks</div><div class="bar-track"><div class="bar-fill" style="width:28%;background:var(--amber)"></div></div><div class="bar-pct" style="color:var(--amber)">19.2%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Business, HR &amp; finance professionals</div><div class="bar-track"><div class="bar-fill" style="width:26%;background:var(--blue)"></div></div><div class="bar-pct">17.9%</div></div>
+        <div class="bar-item"><div class="bar-item-label" style="color:var(--coral);font-weight:600">⚠ Retail, catering, waiting &amp; bar staff</div><div class="bar-track"><div class="bar-fill" style="width:23%;background:var(--coral)"></div></div><div class="bar-pct" style="color:var(--coral)">15.8%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Marketing, PR &amp; sales professionals</div><div class="bar-track"><div class="bar-fill" style="width:17%;background:var(--teal)"></div></div><div class="bar-pct">11.6%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Managers</div><div class="bar-track"><div class="bar-fill" style="width:13%;background:var(--gold)"></div></div><div class="bar-pct">8.8%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Other professionals &amp; technicians</div><div class="bar-track"><div class="bar-fill" style="width:13%;background:var(--muted)"></div></div><div class="bar-pct">8.7%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Other occupations</div><div class="bar-track"><div class="bar-fill" style="width:8%;background:var(--muted)"></div></div><div class="bar-pct">5.3%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Education professionals</div><div class="bar-track"><div class="bar-fill" style="width:4%;background:var(--muted)"></div></div><div class="bar-pct">2.7%</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Top 10 professional jobs <span style="font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)">— AI role disruption risk</span></div>
+        <div style="display:flex;gap:10px;margin-bottom:10px;font-size:.68rem;">
+          <span style="display:flex;align-items:center;gap:4px;"><span class="job-ai-tag tag-high" style="margin:0">High</span> role likely automated or significantly transformed</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span class="job-ai-tag tag-med" style="margin:0">Med</span> role changes but human remains central</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span class="job-ai-tag tag-low" style="margin:0">Lower</span> human value hard to replicate</span>
+        </div>
+        <ul class="job-list">
+          <li class="job-item"><span class="job-rank">01</span><span class="job-name">Events managers and organisers</span><span class="job-ai-tag tag-low">Lower</span></li>
+          <li class="job-item"><span class="job-rank">02</span><span class="job-name">Advertising &amp; marketing associate professionals</span><span class="job-ai-tag tag-high">High</span></li>
+          <li class="job-item"><span class="job-rank">03</span><span class="job-name">Aircraft pilots and air traffic controllers</span><span class="job-ai-tag tag-low">Lower</span></li>
+          <li class="job-item"><span class="job-rank">04</span><span class="job-name">Business sales executives</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">05</span><span class="job-name">Sports coaches, instructors and officials</span><span class="job-ai-tag tag-low">Lower</span></li>
+          <li class="job-item"><span class="job-rank">06</span><span class="job-name">HR &amp; industrial relations officers</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">07</span><span class="job-name">Hotel &amp; accommodation managers and proprietors</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">08</span><span class="job-name">Restaurant &amp; catering establishment managers</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">09</span><span class="job-name">Leisure &amp; sports managers and proprietors</span><span class="job-ai-tag tag-low">Lower</span></li>
+          <li class="job-item"><span class="job-rank">10</span><span class="job-name">Public relations professionals</span><span class="job-ai-tag tag-high">High</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel" style="background:var(--amber-light);border-color:#e8d098;">
+      <div class="panel-title" style="color:var(--amber)">AI disruption mapped — Hospitality, Tourism &amp; Transport</div>
+      <div style="font-size:.76rem;color:var(--muted);margin-bottom:12px;line-height:1.5;"><em>The tags above show the risk level for each specific job title. These bars show how much AI is disrupting each <strong>task or function</strong> within those jobs — because a role rated "Med" may still contain individual tasks at very high risk of automation.</em></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Booking &amp; reservation management</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:88%;background:var(--coral)"></div></div><div class="disc-impact-score" style="color:var(--coral)">88%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Clerical &amp; numerical clerks (19.2%)</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:82%;background:var(--coral)"></div></div><div class="disc-impact-score" style="color:var(--coral)">82%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Retail, catering &amp; bar roles (15.8%)</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:72%;background:var(--coral)"></div></div><div class="disc-impact-score" style="color:var(--coral)">72%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Marketing &amp; PR content work</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:70%;background:var(--amber)"></div></div><div class="disc-impact-score" style="color:var(--amber)">70%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Revenue management (AI optimises, human oversees)</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:62%;background:var(--amber)"></div></div><div class="disc-impact-score" style="color:var(--amber)">62%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Events planning &amp; coordination</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:42%;background:var(--teal)"></div></div><div class="disc-impact-score" style="color:var(--teal)">42%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">High-touch guest experience design</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:22%;background:var(--teal)"></div></div><div class="disc-impact-score" style="color:var(--teal)">22%</div></div>
+      <div class="legend">
+        <span><span class="legend-dot" style="background:var(--coral)"></span>High (&gt;70%)</span>
+        <span><span class="legend-dot" style="background:var(--amber)"></span>Moderate (50–70%)</span>
+        <span><span class="legend-dot" style="background:var(--teal)"></span>Lower (&lt;50%)</span>
+      </div>
+      <div style="margin-top:10px;padding:8px 10px;background:rgba(154,90,0,.1);border-radius:2px;font-size:.78rem;"><strong style="color:var(--amber)">Urgency: High.</strong> Dual exposure: 19.2% in AI-disrupted clerical roles + 15.8% in automation-threatened retail/catering + highest BAS unemployment (7.2%). Curriculum realignment is urgent.</div>
+    </div>
+  </div>
+
+  <!-- MARKETING -->
+  <div id="subj-mkt" class="subj-panel">
+    <div class="kpi-row">
+      <div class="kpi-card c-purple"><div class="kpi-label">Total Responses</div><div class="kpi-value">2,160</div><div class="kpi-note">F: 1,260 / M: 900</div></div>
+      <div class="kpi-card c-purple"><div class="kpi-label">Working Full-Time</div><div class="kpi-value">66.4%</div><div class="kpi-note">Highest full-time rate of all BAS · W&amp;S: 11.3%</div></div>
+      <div class="kpi-card c-purple"><div class="kpi-label">Unemployed</div><div class="kpi-value">6.7%</div><div class="kpi-note">Part-time: 6.0% · Further study: 2.3% · Other: 7.2%</div></div>
+      <div class="kpi-card c-purple"><div class="kpi-label">In Marketing/PR/Sales</div><div class="kpi-value">51.0%</div><div class="kpi-note">Highest single-category concentration in all BAS</div></div>
+      <div class="kpi-card c-purple"><div class="kpi-label">In Retail/Catering</div><div class="kpi-value">12.2%</div><div class="kpi-note">Significant underemployment indicator</div></div>
+    </div>
+    <div class="grid-2-1 mb-20">
+      <div class="panel">
+        <div class="panel-title">Type of work — Marketing (n = 1,570 in UK employment)</div>
+        <div class="bar-item"><div class="bar-item-label" style="color:var(--purple);font-weight:600">Marketing, PR &amp; sales professionals</div><div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--purple)"></div></div><div class="bar-pct" style="color:var(--purple)">51.0%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Retail, catering, waiting &amp; bar staff</div><div class="bar-track"><div class="bar-fill" style="width:24%;background:var(--coral)"></div></div><div class="bar-pct" style="color:var(--coral)">12.2%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Business, HR &amp; finance professionals</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--blue)"></div></div><div class="bar-pct">10.3%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Clerical, secretarial &amp; numerical clerks</div><div class="bar-track"><div class="bar-fill" style="width:18%;background:var(--muted)"></div></div><div class="bar-pct">9.2%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Managers</div><div class="bar-track"><div class="bar-fill" style="width:11%;background:var(--gold)"></div></div><div class="bar-pct">5.4%</div></div>
+        <div class="bar-item"><div class="bar-item-label">IT professionals</div><div class="bar-track"><div class="bar-fill" style="width:4%;background:var(--muted)"></div></div><div class="bar-pct">2.1%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Arts, design &amp; media professionals</div><div class="bar-track"><div class="bar-fill" style="width:3%;background:var(--teal)"></div></div><div class="bar-pct">1.6%</div></div>
+        <div class="bar-item"><div class="bar-item-label">Education professionals</div><div class="bar-track"><div class="bar-fill" style="width:3%;background:var(--muted)"></div></div><div class="bar-pct">1.3%</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Top 10 professional jobs <span style="font-weight:400;letter-spacing:0;text-transform:none;color:var(--muted)">— AI role disruption risk</span></div>
+        <div style="display:flex;gap:10px;margin-bottom:10px;font-size:.68rem;">
+          <span style="display:flex;align-items:center;gap:4px;"><span class="job-ai-tag tag-high" style="margin:0">High</span> role likely automated or significantly transformed</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span class="job-ai-tag tag-med" style="margin:0">Med</span> role changes but human remains central</span>
+          <span style="display:flex;align-items:center;gap:4px;"><span class="job-ai-tag tag-low" style="margin:0">Lower</span> human value hard to replicate</span>
+        </div>
+        <ul class="job-list">
+          <li class="job-item"><span class="job-rank">01</span><span class="job-name">Advertising &amp; marketing associate professionals</span><span class="job-ai-tag tag-high">High</span></li>
+          <li class="job-item"><span class="job-rank">02</span><span class="job-name">Public relations professionals</span><span class="job-ai-tag tag-high">High</span></li>
+          <li class="job-item"><span class="job-rank">03</span><span class="job-name">Business sales executives</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">04</span><span class="job-name">Marketing and commercial managers</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">05</span><span class="job-name">Sales accounts &amp; business development managers</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">06</span><span class="job-name">HR &amp; industrial relations officers</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">07</span><span class="job-name">Managers &amp; directors in retail and wholesale</span><span class="job-ai-tag tag-low">Lower</span></li>
+          <li class="job-item"><span class="job-rank">08</span><span class="job-name">Events managers and organisers</span><span class="job-ai-tag tag-low">Lower</span></li>
+          <li class="job-item"><span class="job-rank">09</span><span class="job-name">Buyers and procurement officers</span><span class="job-ai-tag tag-med">Med</span></li>
+          <li class="job-item"><span class="job-rank">10</span><span class="job-name">Database administrators &amp; web content technicians</span><span class="job-ai-tag tag-high">High</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel" style="background:var(--purple-light);border-color:#c8b8e8;">
+      <div class="panel-title" style="color:var(--purple)">AI disruption mapped — Marketing</div>
+      <div style="font-size:.76rem;color:var(--muted);margin-bottom:12px;line-height:1.5;"><em>The tags above show the risk level for each specific job title. These bars show how much AI is disrupting each <strong>task or function</strong> within those jobs — because a role rated "Med" may still contain individual tasks at very high risk of automation.</em></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Content creation, SEO &amp; campaigns (51%)</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:88%;background:var(--coral)"></div></div><div class="disc-impact-score" style="color:var(--coral)">88%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">PR copy &amp; press release generation</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:79%;background:var(--coral)"></div></div><div class="disc-impact-score" style="color:var(--coral)">79%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Customer segmentation &amp; targeting</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:78%;background:var(--coral)"></div></div><div class="disc-impact-score" style="color:var(--coral)">78%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Campaign performance analysis</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:68%;background:var(--amber)"></div></div><div class="disc-impact-score" style="color:var(--amber)">68%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Sales support &amp; lead generation</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:55%;background:var(--amber)"></div></div><div class="disc-impact-score" style="color:var(--amber)">55%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Brand strategy &amp; creative direction</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:25%;background:var(--teal)"></div></div><div class="disc-impact-score" style="color:var(--teal)">25%</div></div>
+      <div class="disc-impact-row"><div class="disc-impact-label">Influencer &amp; stakeholder relationships</div><div class="disc-impact-track"><div class="disc-impact-fill" style="width:18%;background:var(--teal)"></div></div><div class="disc-impact-score" style="color:var(--teal)">18%</div></div>
+      <div class="legend">
+        <span><span class="legend-dot" style="background:var(--coral)"></span>High (&gt;70%)</span>
+        <span><span class="legend-dot" style="background:var(--amber)"></span>Moderate (50–70%)</span>
+        <span><span class="legend-dot" style="background:var(--teal)"></span>Lower (&lt;50%)</span>
+      </div>
+      <div style="margin-top:10px;padding:8px 10px;background:rgba(90,58,138,.1);border-radius:2px;font-size:.78rem;"><strong style="color:var(--purple)">Urgency: High.</strong> 51% of graduates in roles where AI is already automating core daily tasks. McKinsey identifies sales &amp; marketing as having the single highest AI economic potential ($0.86T) of any corporate function.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═════ AI IMPACT ═════ -->
+<div id="page-ai-impact" class="page">
+<div class="content">
+  <div class="section-head"><div><div class="eyebrow">Analysis</div><h2>AI Disruption — Cross-Discipline View</h2></div></div>
+
+  <div class="quote-block">
+    <p>"AI does not just automate tasks but goes further by automating cognitive functions. Unlike any invention before, AI-powered software can adapt, plan, guide — and even make — decisions."</p>
+    <cite>— McKinsey, Superagency in the Workplace, January 2025</cite>
+  </div>
+
+  <div class="grid-2 mb-28">
+    <div class="panel">
+      <div class="panel-title">AI disruption index — graduate role categories, all 5 BAS subjects</div>
+      <div class="impact-row"><div class="impact-label">Numerical clerks &amp; data entry</div><div class="impact-track"><div class="impact-fill" style="width:94%;background:var(--coral)"></div></div><div class="impact-score" style="color:var(--coral)">94%</div></div>
+      <div class="impact-row"><div class="impact-label">Booking &amp; reservation management</div><div class="impact-track"><div class="impact-fill" style="width:88%;background:var(--coral)"></div></div><div class="impact-score" style="color:var(--coral)">88%</div></div>
+      <div class="impact-row"><div class="impact-label">Marketing content creation &amp; campaigns</div><div class="impact-track"><div class="impact-fill" style="width:88%;background:var(--coral)"></div></div><div class="impact-score" style="color:var(--coral)">88%</div></div>
+      <div class="impact-row"><div class="impact-label">Taxation &amp; compliance work</div><div class="impact-track"><div class="impact-fill" style="width:85%;background:var(--coral)"></div></div><div class="impact-score" style="color:var(--coral)">85%</div></div>
+      <div class="impact-row"><div class="impact-label">Financial analysis &amp; reporting</div><div class="impact-track"><div class="impact-fill" style="width:82%;background:var(--coral)"></div></div><div class="impact-score" style="color:var(--coral)">82%</div></div>
+      <div class="impact-row"><div class="impact-label">PR &amp; press release generation</div><div class="impact-track"><div class="impact-fill" style="width:79%;background:var(--coral)"></div></div><div class="impact-score" style="color:var(--coral)">79%</div></div>
+      <div class="impact-row"><div class="impact-label">Standard accountancy &amp; audit work</div><div class="impact-track"><div class="impact-fill" style="width:76%;background:var(--amber)"></div></div><div class="impact-score" style="color:var(--amber)">76%</div></div>
+      <div class="impact-row"><div class="impact-label">Data analysis &amp; statistical modelling</div><div class="impact-track"><div class="impact-fill" style="width:74%;background:var(--amber)"></div></div><div class="impact-score" style="color:var(--amber)">74%</div></div>
+      <div class="impact-row"><div class="impact-label">Revenue &amp; yield management (Hosp.)</div><div class="impact-track"><div class="impact-fill" style="width:62%;background:var(--amber)"></div></div><div class="impact-score" style="color:var(--amber)">62%</div></div>
+      <div class="impact-row"><div class="impact-label">Management consulting &amp; business analysis</div><div class="impact-track"><div class="impact-fill" style="width:62%;background:var(--amber)"></div></div><div class="impact-score" style="color:var(--amber)">62%</div></div>
+      <div class="impact-row"><div class="impact-label">HR screening &amp; recruitment</div><div class="impact-track"><div class="impact-fill" style="width:56%;background:var(--amber)"></div></div><div class="impact-score" style="color:var(--amber)">56%</div></div>
+      <div class="impact-row"><div class="impact-label">Sales &amp; business development</div><div class="impact-track"><div class="impact-fill" style="width:48%;background:var(--teal)"></div></div><div class="impact-score" style="color:var(--teal)">48%</div></div>
+      <div class="impact-row"><div class="impact-label">Events planning &amp; logistics</div><div class="impact-track"><div class="impact-fill" style="width:42%;background:var(--teal)"></div></div><div class="impact-score" style="color:var(--teal)">42%</div></div>
+      <div class="impact-row"><div class="impact-label">Strategic leadership &amp; vision</div><div class="impact-track"><div class="impact-fill" style="width:28%;background:var(--teal)"></div></div><div class="impact-score" style="color:var(--teal)">28%</div></div>
+      <div class="impact-row"><div class="impact-label">Ethical AI governance &amp; oversight</div><div class="impact-track"><div class="impact-fill" style="width:16%;background:var(--teal)"></div></div><div class="impact-score" style="color:var(--teal)">16%</div></div>
+      <div class="legend">
+        <span><span class="legend-dot" style="background:var(--coral)"></span>High (&gt;70%)</span>
+        <span><span class="legend-dot" style="background:var(--amber)"></span>Moderate (50–70%)</span>
+        <span><span class="legend-dot" style="background:var(--teal)"></span>Lower (&lt;50%)</span>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Urgency index — AI disruption risk by discipline</div>
+      <div style="margin-top:4px;">
+        <div style="padding:11px 13px;background:var(--coral-light);border-radius:2px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-size:.7rem;font-weight:700;color:var(--coral);text-transform:uppercase;letter-spacing:.06em;"><span class="disc-dot d-fin"></span>Finance &amp; Accountancy</div><div style="font-size:.79rem;margin-top:2px;">23.0% in structurally at-risk clerical roles; top 5 jobs all High/Med AI-disruption</div></div>
+          <span class="urgency urg-imm">Immediate</span>
+        </div>
+        <div style="padding:11px 13px;background:var(--coral-light);border-radius:2px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-size:.7rem;font-weight:700;color:var(--coral);text-transform:uppercase;letter-spacing:.06em;"><span class="disc-dot d-econ"></span>Economics</div><div style="font-size:.79rem;margin-top:2px;">Top roles (finance analysis, data analysis, taxation) are McKinsey's highest-potential AI functions</div></div>
+          <span class="urgency urg-imm">Immediate</span>
+        </div>
+        <div style="padding:11px 13px;background:var(--amber-light);border-radius:2px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-size:.7rem;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.06em;"><span class="disc-dot d-mkt"></span>Marketing</div><div style="font-size:.79rem;margin-top:2px;">51.0% in marketing/PR/sales; AI already automating core daily tasks across the category</div></div>
+          <span class="urgency urg-hi">High</span>
+        </div>
+        <div style="padding:11px 13px;background:var(--amber-light);border-radius:2px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-size:.7rem;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:.06em;"><span class="disc-dot d-hosp"></span>Hospitality / Tourism / Transport</div><div style="font-size:.79rem;margin-top:2px;">Dual exposure: 19.2% clerical + 15.8% retail/catering + highest BAS unemployment (7.2%)</div></div>
+          <span class="urgency urg-hi">High</span>
+        </div>
+        <div style="padding:11px 13px;background:var(--blue-light);border-radius:2px;display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-size:.7rem;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;"><span class="disc-dot d-bm"></span>Business &amp; Management</div><div style="font-size:.79rem;margin-top:2px;">Marketing (16.4%) and clerical (13.2%) both disrupted; management roles more resilient</div></div>
+          <span class="urgency urg-med">Medium</span>
+        </div>
+      </div>
+      <div style="margin-top:16px;">
+        <div class="panel-title">Composite AI disruption score by discipline</div>
+        <div style="position:relative;height:180px;"><canvas id="discRiskChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel mb-28">
+    <div class="panel-title">Full type-of-work comparison — colour-coded by AI disruption risk (all 5 disciplines, % of those in UK employment)</div>
+    <div style="overflow-x:auto;">
+      <table class="comp-table">
+        <thead><tr>
+          <th>Work category</th>
+          <th>AI risk</th>
+          <th><span class="disc-dot d-econ"></span>Econ</th>
+          <th><span class="disc-dot d-fin"></span>Fin &amp; Acc.</th>
+          <th><span class="disc-dot d-bm"></span>Biz &amp; Mgmt</th>
+          <th><span class="disc-dot d-hosp"></span>Hospitality</th>
+          <th><span class="disc-dot d-mkt"></span>Marketing</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Business, HR &amp; finance professionals</td><td><span class="urgency urg-imm">High</span></td><td class="pct-cell risk-high">61.2%</td><td class="pct-cell risk-high">53.5%</td><td class="pct-cell risk-med">23.2%</td><td class="pct-cell risk-med">17.9%</td><td class="pct-cell">10.3%</td></tr>
+          <tr><td>Clerical, secretarial &amp; numerical clerks</td><td><span class="urgency urg-imm">Very High</span></td><td class="pct-cell risk-med">11.7%</td><td class="pct-cell risk-high">23.0%</td><td class="pct-cell risk-med">13.2%</td><td class="pct-cell risk-high">19.2%</td><td class="pct-cell risk-med">9.2%</td></tr>
+          <tr><td>Marketing, PR &amp; sales professionals</td><td><span class="urgency urg-hi">High</span></td><td class="pct-cell">5.7%</td><td class="pct-cell">2.9%</td><td class="pct-cell risk-med">16.4%</td><td class="pct-cell risk-med">11.6%</td><td class="pct-cell risk-high">51.0%</td></tr>
+          <tr><td>Managers</td><td><span class="urgency urg-med">Medium</span></td><td class="pct-cell">3.9%</td><td class="pct-cell">3.8%</td><td class="pct-cell">12.2%</td><td class="pct-cell">8.8%</td><td class="pct-cell">5.4%</td></tr>
+          <tr><td>Retail, catering, waiting &amp; bar staff</td><td><span class="urgency urg-hi">High</span></td><td class="pct-cell">5.5%</td><td class="pct-cell">7.1%</td><td class="pct-cell risk-med">10.4%</td><td class="pct-cell risk-high">15.8%</td><td class="pct-cell risk-med">12.2%</td></tr>
+          <tr><td>IT professionals</td><td><span class="urgency urg-hi">High</span></td><td class="pct-cell">3.8%</td><td class="pct-cell">1.3%</td><td class="pct-cell">3.1%</td><td class="pct-cell">0.9%</td><td class="pct-cell">2.1%</td></tr>
+          <tr><td>Engineering &amp; building professionals</td><td><span class="urgency urg-med">Medium</span></td><td class="pct-cell">1.4%</td><td class="pct-cell">1.2%</td><td class="pct-cell">5.0%</td><td class="pct-cell">0.5%</td><td class="pct-cell">0.9%</td></tr>
+          <tr><td>Education professionals</td><td><span class="urgency" style="background:var(--teal-light);color:var(--teal)">Lower</span></td><td class="pct-cell risk-low">1.1%</td><td class="pct-cell risk-low">1.3%</td><td class="pct-cell risk-low">2.5%</td><td class="pct-cell risk-low">2.7%</td><td class="pct-cell risk-low">1.3%</td></tr>
+          <tr><td>Legal, social &amp; welfare professionals</td><td><span class="urgency" style="background:var(--teal-light);color:var(--teal)">Lower</span></td><td class="pct-cell risk-low">1.1%</td><td class="pct-cell risk-low">0.4%</td><td class="pct-cell risk-low">1.9%</td><td class="pct-cell risk-low">1.2%</td><td class="pct-cell risk-low">0.7%</td></tr>
+          <tr><td>Arts, design &amp; media professionals</td><td><span class="urgency urg-hi">High</span></td><td class="pct-cell">0.6%</td><td class="pct-cell">0.3%</td><td class="pct-cell">1.1%</td><td class="pct-cell">0.6%</td><td class="pct-cell risk-med">1.6%</td></tr>
+          <tr><td>Other professionals &amp; technicians</td><td><span class="urgency urg-med">Medium</span></td><td class="pct-cell">1.3%</td><td class="pct-cell">0.8%</td><td class="pct-cell">2.2%</td><td class="pct-cell">8.7%</td><td class="pct-cell">0.5%</td></tr>
+          <tr><td>Skilled trades &amp; vocational</td><td><span class="urgency urg-med">Medium</span></td><td class="pct-cell">0.6%</td><td class="pct-cell">0.5%</td><td class="pct-cell">1.9%</td><td class="pct-cell">3.3%</td><td class="pct-cell">1.2%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="display:flex;gap:16px;margin-top:10px;font-size:.72rem;align-items:center;">
+      <span style="display:flex;align-items:center;gap:5px;"><span style="display:inline-block;width:12px;height:12px;background:var(--coral-light);border:1px solid var(--coral);border-radius:1px;"></span>High risk concentration</span>
+      <span style="display:flex;align-items:center;gap:5px;"><span style="display:inline-block;width:12px;height:12px;background:var(--amber-light);border:1px solid var(--amber);border-radius:1px;"></span>Moderate risk concentration</span>
+      <span style="display:flex;align-items:center;gap:5px;"><span style="display:inline-block;width:12px;height:12px;background:var(--teal-light);border:1px solid var(--teal);border-radius:1px;"></span>Lower risk</span>
+    </div>
+  </div>
+
+  <div class="panel mb-28">
+    <div class="panel-title">What changes, what survives — disruption matrix across all five BAS subjects</div>
+    <div class="matrix-grid">
+      <div class="matrix-cell high">
+        <h4>High disruption — automated now or imminently</h4>
+        <p><strong>All disciplines:</strong> Data entry, reconciliation, standard financial reporting, compliance checklists, invoice processing.<br><br><strong>Economics/Finance:</strong> Tax computation, investment data processing, standard credit assessment, routine audit tasks, financial accounts management.<br><br><strong>Marketing:</strong> Content generation, SEO copy, email campaigns, social posts, A/B testing, customer segmentation.<br><br><strong>Hospitality:</strong> Booking management, customer query handling, reservation confirmations, standard pricing calculations.</p>
+      </div>
+      <div class="matrix-cell med">
+        <h4>Medium disruption — roles transform significantly</h4>
+        <p><strong>Economics/Finance:</strong> Financial analysis (AI drafts, human reviews and contextualises), actuarial modelling (AI builds, human validates assumptions), consulting (AI generates options, human frames and presents).<br><br><strong>Business &amp; Mgmt:</strong> HR screening (AI filters, human decides), project tracking, campaign strategy direction.<br><br><strong>Hospitality:</strong> Revenue management (AI optimises, human manages experience), event coordination logistics.</p>
+      </div>
+      <div class="matrix-cell low">
+        <h4>Lower disruption — human value remains central</h4>
+        <p><strong>All disciplines:</strong> Ethical governance and accountability for AI decisions, strategic vision-setting, complex stakeholder negotiation, organisational change leadership, crisis handling.<br><br><strong>Economics:</strong> Novel policy advice, complex geopolitical risk judgement.<br><br><strong>Hospitality:</strong> High-touch guest experience, relationship-based revenue management.<br><br><strong>Marketing:</strong> Brand strategy, cultural insight, creative direction, influencer relationship management.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-callout">
+    <div class="stat-item"><span class="stat-big">46%</span><div class="stat-desc">Of business leaders cite skill gaps as significant barrier to AI adoption</div></div>
+    <div class="stat-item"><span class="stat-big">67%</span><div class="stat-desc">Employee trust in universities to deploy AI responsibly</div></div>
+    <div class="stat-item"><span class="stat-big">170M</span><div class="stat-desc">New jobs projected globally by 2030, requiring new skills (WEF 2025)</div></div>
+    <div class="stat-item"><span class="stat-big">2.4×</span><div class="stat-desc">More likely C-suite blames employees than own leadership failures for slow AI adoption</div></div>
+  </div>
+</div>
+</div>
+
+<!-- ═════ UNIVERSITY RESPONSE ═════ -->
+<div id="page-university" class="page">
+<div class="content">
+  <div class="section-head"><div><div class="eyebrow">Response</div><h2>The University Imperative — All Five BAS Disciplines</h2></div></div>
+  <div class="quote-block">
+    <p>"The risk for business leaders is not thinking too big about AI, but thinking too small."</p>
+    <cite>— McKinsey, Superagency in the Workplace, January 2025</cite>
+  </div>
+  <div class="panel mb-28">
+    <div class="panel-title">Five imperatives — curriculum transformation across all BAS disciplines</div>
+    <div class="action-grid">
+      <div class="action-card a1">
+        <div class="action-header"><div class="action-num">01</div><div class="action-title">Reframe AI Literacy as a Core Professional Competency</div></div>
+        <div class="action-body">Not an elective. Every BAS graduate needs to understand what AI can and cannot do in their domain — how LLMs handle financial documents, how AI generates marketing content, how booking AI works in hospitality. This is a baseline, not a module.</div>
+      </div>
+      <div class="action-card a2">
+        <div class="action-header"><div class="action-num">02</div><div class="action-title">Embed Data &amp; AI Governance in Core Curricula</div></div>
+        <div class="action-body">Finance: legal accountability for AI decisions. Marketing: data privacy and targeting ethics. Hospitality: AI pricing ethics. Economics: algorithmic policy implications. Governance is discipline-specific, not generic digital skills.</div>
+      </div>
+      <div class="action-card a3">
+        <div class="action-header"><div class="action-num">03</div><div class="action-title">Elevate Human Skills AI Cannot Replicate</div></div>
+        <div class="action-body">Judgement, ethical reasoning, stakeholder management, creative direction, change leadership. McKinsey identifies these as the non-technological factors that determine AI deployment success. Business programmes must stop treating them as "soft".</div>
+      </div>
+      <div class="action-card a4">
+        <div class="action-header"><div class="action-num">04</div><div class="action-title">Embed AI Tools in Live Practice</div></div>
+        <div class="action-body">Finance: AI-assisted audit and modelling that students must challenge and critique. Marketing: AI content pipelines with human creative direction. Hospitality: AI revenue management tools. Economics: AI-generated analysis students must evaluate. The tool is the curriculum.</div>
+      </div>
+      <div class="action-card a5">
+        <div class="action-header"><div class="action-num">05</div><div class="action-title">Prepare Graduates for the Leadership Challenge</div></div>
+        <div class="action-body">McKinsey's core finding: the bottleneck is leadership, not technology or employees. All five BAS disciplines must produce graduates who can develop AI roadmaps, align organisations on AI strategy, govern ethically, and make bold commitments. This is what employers need most.</div>
+      </div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-title">Curriculum gap analysis — current provision vs. employer requirement</div>
+      <div style="position:relative;height:300px;"><canvas id="gapChart"></canvas></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">McKinsey: employee trust to deploy AI responsibly (%)</div>
+      <div style="position:relative;height:200px;margin-bottom:20px;"><canvas id="trustChart"></canvas></div>
+      <div style="font-size:.8rem;line-height:1.5;color:var(--ink);">Universities rank second only to employers in employee trust for responsible AI deployment (67%). This represents both credibility and a clear mandate to lead — graduates expect their university education to prepare them for the AI-transformed workplace.</div>
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <div class="stat-callout" style="background:var(--blue);">
+    <div class="stat-item"><span class="stat-big" style="color:#c8a84e">67%</span><div class="stat-desc">Employee trust in universities — institutions have the credibility and mandate to act now</div></div>
+    <div class="stat-item"><span class="stat-big" style="color:#c8a84e">5</span><div class="stat-desc">BAS disciplines — each with a distinct disruption profile requiring tailored response</div></div>
+    <div class="stat-item"><span class="stat-big" style="color:#c8a84e">21K+</span><div class="stat-desc">BAS graduates per year — every one entering AI-disrupted sectors</div></div>
+  </div>
+</div>
+</div>
+
+<div class="dash-footer">
+  Data: What Do Graduates Do? 2025/26 (Prospects/HESA) &nbsp;·&nbsp; Superagency in the Workplace (McKinsey, January 2025) &nbsp;·&nbsp; WEF Future of Jobs Report 2025
+</div>
+
+<script>
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+  setTimeout(initCharts,80);
+}
+function showSubj(id,btn){
+  document.querySelectorAll('.subj-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.subj-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('subj-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+}
+Chart.defaults.font.family="'DM Sans',sans-serif";
+Chart.defaults.font.size=11;
+Chart.defaults.color='#6b6b72';
+const C={blue:'#1a3a6b',coral:'#c84b2f',teal:'#1a6b5a',amber:'#9a5a00',purple:'#5a3a8a',gold:'#b8860b',muted:'#6b6b72',blueA:'rgba(26,58,107,.18)',coralA:'rgba(200,75,47,.18)',tealA:'rgba(26,107,90,.18)',amberA:'rgba(154,90,0,.18)',purpleA:'rgba(90,58,138,.18)'};
+let done={};
+function initCharts(){
+  // Full-time rate
+  if(!done.ft&&document.getElementById('ftChart')){done.ft=true;
+    new Chart(document.getElementById('ftChart'),{type:'bar',data:{labels:['Natl avg','Economics','Finance & Acc.','Biz & Mgmt','Hospitality','Marketing'],datasets:[{data:[56.4,60.1,57.5,62.4,60.8,66.4],backgroundColor:[C.muted,C.blue,C.coral,C.teal,C.amber,C.purple],borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>v+'%'},min:50,max:70},x:{grid:{display:false}}}}});}
+
+  // Outcomes stacked — corrected figures:
+  // Econ:  FT=60.1, PT=6.5, W&S=6.8, Unemp=6.3, FurtherStudy=14.8, Other=5.4
+  // Fin:   FT=57.5, PT=6.4, W&S=8.1, Unemp=7.3, FurtherStudy=18.1, Other=2.6
+  // BM:    FT=62.4, PT=9.7, W&S=10.4, Unemp=6.3, FurtherStudy=2.9, Other=8.3
+  // Hosp:  FT=60.8, PT=9.9, W&S=5.9, Unemp=7.2, FurtherStudy=2.1, Other=14.0
+  // Mktg:  FT=66.4, PT=6.0, W&S=11.3, Unemp=6.7, FurtherStudy=2.3, Other=7.2 (wait: source gives 66.4,6.0,7.2,2.3,6.7,11.3 => FT=66.4,PT=6.0,W&S=7.2,FS=2.3,Unemp=6.7,Other=11.3)
+  // Let me recheck Marketing: labels order Other,Unemp,FurtherStudy,W&S,PT => values 66.4,6.0,7.2,2.3,6.7,11.3
+  // => FT=66.4, PT=6.0, W&S=7.2, FurtherStudy=2.3, Unemp=6.7, Other=11.3
+  if(!done.oc&&document.getElementById('outcomesChart')){done.oc=true;
+    new Chart(document.getElementById('outcomesChart'),{type:'bar',data:{labels:['Economics','Finance & Acc.','Biz & Mgmt','Hospitality','Marketing'],datasets:[
+      {label:'Full-time',        data:[60.1,57.5,62.4,60.8,66.4],backgroundColor:C.blue,  borderRadius:2},
+      {label:'Working & studying',data:[6.8, 8.1, 10.4,5.9, 7.2], backgroundColor:C.teal, borderRadius:2},
+      {label:'Part-time',        data:[6.5, 6.4, 9.7, 9.9, 6.0], backgroundColor:C.gold, borderRadius:2},
+      {label:'Unemployed',       data:[6.3, 7.3, 6.3, 7.2, 6.7], backgroundColor:C.coral,borderRadius:2},
+      {label:'Further study',    data:[14.8,18.1,2.9, 2.1, 2.3], backgroundColor:C.muted,borderRadius:2},
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:8,padding:7,font:{size:9}}}},scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:9}}},y:{stacked:true,grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>v+'%'}}}}});}
+
+  // Work-type concentration
+  if(!done.conc&&document.getElementById('concChart')){done.conc=true;
+    new Chart(document.getElementById('concChart'),{type:'bar',data:{labels:['Econ','Fin/Acc','Biz/Mgmt','Hosp','Mktg'],datasets:[
+      {label:'Biz/HR/Finance',  data:[61.2,53.5,23.2,17.9,10.3],backgroundColor:C.blue,  borderRadius:2},
+      {label:'Mktg/PR/Sales',   data:[5.7, 2.9, 16.4,11.6,51.0],backgroundColor:C.purple,borderRadius:2},
+      {label:'Clerical',        data:[11.7,23.0,13.2,19.2,9.2], backgroundColor:C.muted, borderRadius:2},
+      {label:'Retail/Catering', data:[5.5, 7.1, 10.4,15.8,12.2],backgroundColor:C.coral, borderRadius:2},
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:8,padding:7,font:{size:9}}}},scales:{x:{stacked:true,grid:{display:false},ticks:{font:{size:9}}},y:{stacked:true,grid:{color:'rgba(0,0,0,.05)'},ticks:{callback:v=>v+'%'}}}}});}
+
+  // Discipline risk score
+  if(!done.dr&&document.getElementById('discRiskChart')){done.dr=true;
+    new Chart(document.getElementById('discRiskChart'),{type:'bar',data:{labels:['Finance & Acc.','Economics','Marketing','Hospitality','Biz & Mgmt'],datasets:[{data:[78,72,68,64,55],backgroundColor:[C.coral,C.coral,C.amber,C.amber,C.teal],borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(0,0,0,.05)'},max:100,ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}}});}
+
+  // Trust chart
+  if(!done.tr&&document.getElementById('trustChart')){done.tr=true;
+    new Chart(document.getElementById('trustChart'),{type:'bar',data:{labels:['Employer','Universities','Large Tech','Start-ups','Government'],datasets:[{data:[71,67,61,51,45],backgroundColor:[C.blue,C.teal,C.amber,C.coral,C.muted],borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(0,0,0,.05)'},max:100,ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}}});}
+
+  // Gap chart
+  if(!done.gc&&document.getElementById('gapChart')){done.gc=true;
+    new Chart(document.getElementById('gapChart'),{type:'radar',data:{labels:['AI literacy','Data governance','AI ethics','Human judgement','Change leadership','AI tool practice'],datasets:[
+      {label:'Current provision (est.)',data:[22,18,28,52,38,18],borderColor:C.muted,backgroundColor:'rgba(107,107,114,.12)',borderDash:[4,2],borderWidth:2},
+      {label:'Employer requirement',   data:[88,76,82,92,86,90],borderColor:C.blue,backgroundColor:C.blueA,borderWidth:2}
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:8,padding:7,font:{size:9}}}},scales:{r:{min:0,max:100,grid:{color:'rgba(0,0,0,.08)'},ticks:{display:false},pointLabels:{font:{size:9}}}}}});}
+}
+window.addEventListener('load',initCharts);
+</script>
+</body>
+</html>
